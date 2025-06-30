@@ -1,12 +1,60 @@
-# React + Vite
+# 🌤️ Live Weather App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A sleek and responsive weather application built using **React JS** that allows users to check the current weather and related data like humidity, wind speed, and "feels like" temperature, powered by the **OpenWeatherMap API**.
 
-Currently, two official plugins are available:
+![image](https://github.com/user-attachments/assets/31729fde-bd47-4449-aba6-8a3ff7faa90f)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🔗 Live Demo
+
+👉 [View the live app on Vercel](https://weatherbysuj.vercel.app/)  
+
+---
+
+## 📦 Features
+
+- 🔍 Search for weather by city name
+- 📍 Display current weather, temperature, humidity, and wind speed
+- 🌡️ Shows "feels like" temperature with gradient-styled UI
+- 🎨 Responsive, minimal, and animated UI
+- ⛅ Weather icon based on conditions
+- 🌈 Dynamic background gradient based on weather type (Clear, Clouds, Rain, etc.)
+- 🌀 Real-time updates with loading indicator
+
+---
+
+## 🛠️ Tech Stack
+
+- **React.js**
+- **OpenWeatherMap API**
+- **CSS** (for gradients, animations, responsiveness)
+- **Font Awesome** (icons)
+- **Vercel** (for hosting)
+
+---
+
+
+## 📷 Screenshots
+![Screenshot 2025-06-30 145601](https://github.com/user-attachments/assets/c3b8887b-50ad-47c4-8d85-eff4fec5345d)
+
+![Screenshot 2025-06-30 145620](https://github.com/user-attachments/assets/a4916b13-40a1-40f3-bd71-0c33013d71bb)
+
+![Screenshot 2025-06-30 145751](https://github.com/user-attachments/assets/ff3fed12-d014-4fe9-abd2-1cc0bfcffdd3)
+
+
+---
+
+## 🙌 Acknowledgements
+
+- [OpenWeatherMap](https://openweathermap.org/)
+- [Font Awesome](https://fontawesome.com/)
+- [Vercel](https://vercel.com/)
+
+---
+
+## 📬 Contact
+
+Built with ❤️ by **Sujay P V**  
+Feel free to reach out on [LinkedIn](https://linkedin.com/in/sujaypv) or contribute to this project!
