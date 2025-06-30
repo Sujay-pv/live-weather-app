@@ -3,12 +3,16 @@ import cloudy from "../assets/images/cloudy.png";
 import snowy from "../assets/images/snowy.png";
 import sunny from "../assets/images/sunny.png";
 import rainy from "../assets/images/rainy.png";
+import loadingGif from "../assets/images/loading.gif";
 
 const Weather = () => {
   const api_key = import.meta.env.VITE_API_KEY;
   const [location, setLocation] = useState("Bengaluru");
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=Metric&appid=${api_key}`;
+
 
   const handleChange = (event) => {
     setLocation(event.target.value);
@@ -20,6 +24,7 @@ const Weather = () => {
   const search = async () => {
     if (location.trim() !== "") {
       try {
+        setLoading(true);
         const res = await fetch(url);
         const searchData = await res.json();
         if(searchData.cod !== 200){
@@ -29,9 +34,12 @@ const Weather = () => {
         console.log(searchData);
         setLocation("");
         }
-        
+
       } catch (error) {
         console.error(error);
+      }
+      finally{
+        setLoading(false);
       }
     }
   };
@@ -97,7 +105,7 @@ const Weather = () => {
             <i className="fa-solid fa-magnifying-glass" onClick={search}></i>
           </div>
         </div>
-        {data.notFound ? (<div className="not-found">Not Found 😒</div>) : (
+        {loading ? (<img className="loader" src={loadingGif} alt="loading"/>) :  data.notFound ? (<div className="not-found">Not Found 😒</div>) : (
           <>
           <div className="weather">
           <img src={currentWeather} alt="sunny" />
@@ -106,6 +114,7 @@ const Weather = () => {
           </div>
           <div className="temp">
             {data.main ? `${Math.floor(data.main.temp)}°` : null}
+            <div className="feels-like">Feels like {data.main ? `${Math.floor(data.main.feels_like)}°` : null }</div>
           </div>
         </div>
         <div className="weather-date">{currentdate}</div>

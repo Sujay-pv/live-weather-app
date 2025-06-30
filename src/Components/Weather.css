@@ -88,7 +88,7 @@ cursor: pointer;
 }
 .temp{
     position: absolute;
-    top: 55%;
+    top: 52%;
     left: 50%;
     transform: translateX(-40%);
     font-size: 9rem;
@@ -97,6 +97,18 @@ cursor: pointer;
     -webkit-text-fill-color: transparent;
     text-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
 
+}
+.feels-like{
+    position: absolute;
+    font-size: 1.6rem;
+    margin-top: -1rem;
+    color: #484569;
+    top: 104%;
+    left: 8%;
+    -webkit-text-fill-color: initial;
+  -webkit-background-clip: initial;
+    
+    
 }
 
 .weather-date{
@@ -138,4 +150,15 @@ text-shadow: -0.3rem 0.3rem 0.5rem rgba(0, 0, 0, 0.1);
 .data{
     font-size: 2rem;
     color: #2f2e57;
+}
+
+.not-found{
+    font-size: 3rem;
+    color: #484569;
+    margin-top: 5rem;
+    text-shadow: -0.3rem 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+.loader{
+    width: 5rem;
+    margin-top: 10rem;
 }
