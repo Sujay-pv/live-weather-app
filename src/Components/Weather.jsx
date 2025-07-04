@@ -10,9 +10,9 @@ const Weather = () => {
   const [location, setLocation] = useState("Bengaluru");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=Metric&appid=${api_key}`;
-
 
   const handleChange = (event) => {
     setLocation(event.target.value);
@@ -21,28 +21,62 @@ const Weather = () => {
     search();
   }, []);
 
-  const search = async () => {
-    if (location.trim() !== "") {
-      try {
-        setLoading(true);
-        const res = await fetch(url);
-        const searchData = await res.json();
-        if(searchData.cod !== 200){
-          setData({notFound : true});
-        }else{
-        setData(searchData);
-        console.log(searchData);
-        setLocation("");
-        }
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (location.trim().length > 2) {
+        fetchSuggestions(location);
+      } else {
+        setSuggestions([]);
+      }
+    }, 300); // wait 300ms after typing stops
 
-      } catch (error) {
-        console.error(error);
-      }
-      finally{
-        setLoading(false);
-      }
+    return () => clearTimeout(delayDebounce);
+  }, [location]);
+
+  const fetchSuggestions = async (query) => {
+    try {
+      const res = await fetch(
+        `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${api_key}`
+      );
+      const data = await res.json();
+      setSuggestions(data); // array of location objects
+    } catch (err) {
+      console.error("Error fetching location suggestions", err);
     }
   };
+
+const handleSelectSuggestion = (item) => {
+  const fullName = `${item.name}${item.state ? `, ${item.state}` : ""}, ${item.country}`;
+  setLocation(fullName);
+  setSuggestions([]);
+  search(fullName); // direct call with the correct value
+};
+
+
+
+
+const search = async (loc = location) => {
+  if (loc.trim() !== "") {
+    try {
+      setLoading(true);
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(loc)}&appid=${api_key}&units=metric`;
+      const res = await fetch(url);
+      const searchData = await res.json();
+      if (searchData.cod !== 200) {
+        setData({ notFound: true });
+      } else {
+        setData(searchData);
+        console.log(searchData);
+        setLocation(""); // clear input
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+};
+
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -87,7 +121,15 @@ const Weather = () => {
 
   return (
     <div className="container" style={{ backgroundImage }}>
-      <div className="weather-app" style={{backgroundImage: backgroundImage && backgroundImage.replace ? backgroundImage.replace('to right', 'to top') : null,}}>
+      <div
+        className="weather-app"
+        style={{
+          backgroundImage:
+            backgroundImage && backgroundImage.replace
+              ? backgroundImage.replace("to right", "to top")
+              : null,
+        }}
+      >
         <div className="search">
           <div className="search-top">
             <i className="fa-solid fa-location-dot"></i>
@@ -103,40 +145,55 @@ const Weather = () => {
             />
 
             <i className="fa-solid fa-magnifying-glass" onClick={search}></i>
+            {suggestions.length > 0 && (
+              <ul className="suggestions-dropdown">
+                {suggestions.map((item, index) => (
+                  <li key={index} onMouseDown={() => handleSelectSuggestion(item)}>
+                    {item.name},{item.country}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
-        {loading ? (<img className="loader" src={loadingGif} alt="loading"/>) :  data.notFound ? (<div className="not-found">Not Found 😒</div>) : (
+        {loading ? (
+          <img className="loader" src={loadingGif} alt="loading" />
+        ) : data.notFound ? (
+          <div className="not-found">Not Found 😒</div>
+        ) : (
           <>
-          <div className="weather">
-          <img src={currentWeather} alt="sunny" />
-          <div className="weather-type">
-            {data.weather ? data.weather[0].main : null}
-          </div>
-          <div className="temp">
-            {data.main ? `${Math.floor(data.main.temp)}°` : null}
-            <div className="feels-like">Feels like {data.main ? `${Math.floor(data.main.feels_like)}°` : null }</div>
-          </div>
-        </div>
-        <div className="weather-date">{currentdate}</div>
-        <div className="weather-data">
-          <div className="humidity">
-            <div className="data-name">Humidity</div>
-            <i className="fa-solid fa-droplet"></i>
-            <div className="data">
-              {data.main ? `${data.main.humidity}%` : null}
+            <div className="weather">
+              <img src={currentWeather} alt="sunny" />
+              <div className="weather-type">
+                {data.weather ? data.weather[0].main : null}
+              </div>
+              <div className="temp">
+                {data.main ? `${Math.floor(data.main.temp)}°` : null}
+                <div className="feels-like">
+                  Feels like{" "}
+                  {data.main ? `${Math.floor(data.main.feels_like)}°` : null}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="wind">
-            <div className="data-name">Wind</div>
-            <i className="fa-solid fa-wind"></i>
-            <div className="data">
-              {data.wind ? data.wind.speed : null} Km/h
+            <div className="weather-date">{currentdate}</div>
+            <div className="weather-data">
+              <div className="humidity">
+                <div className="data-name">Humidity</div>
+                <i className="fa-solid fa-droplet"></i>
+                <div className="data">
+                  {data.main ? `${data.main.humidity}%` : null}
+                </div>
+              </div>
+              <div className="wind">
+                <div className="data-name">Wind</div>
+                <i className="fa-solid fa-wind"></i>
+                <div className="data">
+                  {data.wind ? data.wind.speed : null} Km/h
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
           </>
         )}
-        
       </div>
     </div>
   );
